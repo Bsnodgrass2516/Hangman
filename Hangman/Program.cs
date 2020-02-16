@@ -4,105 +4,174 @@ namespace Hangman
 {
     class Program
     {
-        // Test comment from Keith
+        // 'Global variables avaialbe anywhere in the game code.
+        // This is how you pass values from one part of the program to another.
+        // By creating a variable here and assigning it a value, that value will
+        // be availale in any part of the game code.
+
+        // GLOBAL VARIABLES
+        static int numberIncorrect;
+        static int numberCorrect;
+
+        static string wordToGuess;
+
+        static char userGuess;
+
+        static string userGuessed;
+
+        static string userGuessString;
+
+        static string[] currentWordStatus;
+
+        static bool gameLoopShouldContinue = true;
+
 
         static void Main(string[] args)
         {
-            int numberIncorrect = 0;
-            int numberCorrect = 0;
+            InitializeGameState();
 
-            string wordToGuess = ChooseWord();
+            Draw();
 
-            char userGuess = '\0';
+            // Primary game loop
+            while (gameLoopShouldContinue)  // See how this reads like english?  Makes understanding the code easier
+            {
 
-            string userGuessed = "";
+                // Collect Inputs
+                // No need to render the game state first, as it will still be on the screen from the previous time through the loop.
+                // If this is the first time through the loop, the Draw() call above outside the loop will render the initial game state.
+                CollectInputs();
 
-            string userGuessString;
+                // Update the game state
+                Update();
 
-            string[] currentWordStatus = new string[wordToGuess.Length];
+                // Render the game
+                Draw();
+
+
+
+                ////Draw current view
+                //Console.WriteLine(HangmanProgress(numberIncorrect));
+                //for (int i = 0; i < wordToGuess.Length; i++)
+                //{
+                //    Console.WriteLine(currentWordStatus[i]);
+
+                //    if (i != wordToGuess.Length - 1)
+                //    {
+                //        Console.SetCursorPosition(i * 2 + 2, Console.CursorTop - 1);
+                //    }
+
+                //}
+
+                //Console.WriteLine("Letters Guessed: " + userGuessed);
+                //Console.WriteLine(wordToGuess);
+                //Console.WriteLine("Guess a letter or enter ~ to give up");
+
+                ////Take user input and format appropriately
+                //userGuessString = Console.ReadLine();
+
+                //userGuessString = userGuessString.ToUpper();
+
+                //userGuessed += userGuessString[0];
+
+                //userGuess = userGuessString[0];
+
+                ////check guess, update variables, and check victory conditions.
+                //if (wordToGuess.Contains(userGuess))
+                //{
+                //    currentWordStatus = UpdateWordStatus(userGuessed, wordToGuess);
+                //    numberCorrect++;
+                //}
+                //else
+                //{
+                //    numberIncorrect++;
+                //    if (numberIncorrect == 6)
+                //    {
+                //        Console.WriteLine("GAME OVER\r\nYOU ARE DEAD\r\n WOULD YOU LIKE TO PLAY AGAIN (Y/N)?");
+                //        userGuessString = Console.ReadLine();
+                //        userGuessString = userGuessString.ToUpper();
+                //        userGuess = userGuessString[0];
+
+                //        if (userGuess != 'Y' || userGuess != 'N')
+                //        {
+                //            while (userGuess != 'Y' || userGuess != 'N')
+                //            {
+                //                Console.WriteLine("PLEASE ENTER 'Y' OR 'N'");
+                //                userGuessString = Console.ReadLine();
+                //                userGuessString = userGuessString.ToUpper();
+                //                userGuess = userGuessString[0];
+                //                Console.WriteLine("User input: " + userGuess);
+                //            }
+                //        }
+                //        if (userGuess == 'Y')
+                //        {
+                //            numberIncorrect = 0;
+                //            numberCorrect = 0;
+
+                //            wordToGuess = ChooseWord();
+
+                //            userGuess = '\0';
+
+                //            userGuessed = "";
+
+                //            userGuessString = "";
+
+                //            currentWordStatus = UpdateWordStatus(userGuessed, wordToGuess);
+                //        }
+                //        if (userGuess == 'N')
+                //        {
+                //            Console.WriteLine("Bye-Bye Now!");
+                //            userGuess = '~';
+                //        }
+                //    }
+                //}
+
+                //Console.Clear();
+                //Console.SetCursorPosition(0,0);
+            }
+        }
+
+        private static void InitializeGameState()
+        {
+            // In here you should set the initial values of any global variables to get the game ready to play.
+            // Make sure to think about things that might need to be 'reset' from a previous game, but also things
+            // that need to be set if this is the first game
+
+            // I copied the initializations from your old code to here
+
+            numberIncorrect = 0;
+            numberCorrect = 0;
+
+            wordToGuess = ChooseWord();
+
+            userGuess = '\0';
+
+            userGuessed = "";
+
+            userGuessString = string.Empty;
+
+            currentWordStatus = new string[wordToGuess.Length];
 
             currentWordStatus = UpdateWordStatus(userGuessed, wordToGuess);
 
-            while (userGuess != '~')
-            {
-                //Draw current view
-                Console.WriteLine(HangmanProgress(numberIncorrect));
-                for (int i = 0; i < wordToGuess.Length; i++)
-                {
-                    Console.WriteLine(currentWordStatus[i]);
+            gameLoopShouldContinue = true;
+        }
 
-                    if (i != wordToGuess.Length - 1)
-                    {
-                        Console.SetCursorPosition(i * 2 + 2, Console.CursorTop - 1);
-                    }
+        // Read the next input from the user, store it in a global variable
+        private static void CollectInputs()
+        {
 
-                }
-                Console.WriteLine("Letters Guessed: " + userGuessed);
-                Console.WriteLine(wordToGuess);
-                Console.WriteLine("Guess a letter or enter ~ to give up");
+        }
 
-                //Take user input and format appropriately
-                userGuessString = Console.ReadLine();
+        // Update the game state, determine victory and loss conditions
+        private static void Update()
+        {
 
-                userGuessString = userGuessString.ToUpper();
+        }
 
-                userGuessed += userGuessString[0];
+        // Render the game state
+        private static void Draw()
+        {
 
-                userGuess = userGuessString[0];
-
-                //check guess, update variables, and check victory conditions.
-                if (wordToGuess.Contains(userGuess))
-                {
-                    currentWordStatus = UpdateWordStatus(userGuessed, wordToGuess);
-                    numberCorrect++;
-                }
-                else
-                {
-                    numberIncorrect++;
-                    if (numberIncorrect == 6)
-                    {
-                        Console.WriteLine("GAME OVER\r\nYOU ARE DEAD\r\n WOULD YOU LIKE TO PLAY AGAIN (Y/N)?");
-                        userGuessString = Console.ReadLine();
-                        userGuessString = userGuessString.ToUpper();
-                        userGuess = userGuessString[0];
-
-                        if (userGuess != 'Y' || userGuess != 'N')
-                        {
-                            while (userGuess != 'Y' || userGuess != 'N')
-                            {
-                                Console.WriteLine("PLEASE ENTER 'Y' OR 'N'");
-                                userGuessString = Console.ReadLine();
-                                userGuessString = userGuessString.ToUpper();
-                                userGuess = userGuessString[0];
-                                Console.WriteLine("User input: " + userGuess);
-                            }
-                        }
-                        if (userGuess == 'Y')
-                        {
-                            numberIncorrect = 0;
-                            numberCorrect = 0;
-
-                            wordToGuess = ChooseWord();
-
-                            userGuess = '\0';
-
-                            userGuessed = "";
-
-                            userGuessString = "";
-
-                            currentWordStatus = UpdateWordStatus(userGuessed, wordToGuess);
-                        }
-                        if (userGuess == 'N')
-                        {
-                            Console.WriteLine("Bye-Bye Now!");
-                            userGuess = '~';
-                        }
-                    }
-                }
-
-                Console.Clear();
-                Console.SetCursorPosition(0,0);
-            }
         }
 
         public static string ChooseWord() 

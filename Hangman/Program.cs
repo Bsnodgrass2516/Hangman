@@ -151,7 +151,7 @@ namespace Hangman
 
             currentWordStatus = new string[wordToGuess.Length];
 
-            currentWordStatus = UpdateWordStatus(userGuessed, wordToGuess);
+            currentWordStatus = UpdateWordStatus();
 
             gameLoopShouldContinue = true;
         }
@@ -159,19 +159,86 @@ namespace Hangman
         // Read the next input from the user, store it in a global variable
         private static void CollectInputs()
         {
+            userGuessString = Console.ReadLine();
 
+            userGuessString = userGuessString.ToUpper();
+
+            userGuessed += userGuessString[0];
+
+            userGuess = userGuessString[0];
         }
 
         // Update the game state, determine victory and loss conditions
         private static void Update()
         {
 
+            if (wordToGuess.Contains(userGuess) == true)
+            {
+                currentWordStatus = UpdateWordStatus();
+                numberCorrect++;
+            }
+            else
+            {
+                numberIncorrect++;
+                if (numberIncorrect == 6)
+                {
+                    Console.WriteLine("GAME OVER\r\nYOU ARE DEAD\r\nWOULD YOU LIKE TO PLAY AGAIN (Y/N)?");
+                    CollectInputs();
+
+                    if (userGuess != 'Y' && userGuess != 'N')
+                    {
+                        while (userGuess != 'Y' || userGuess != 'N')
+                        {
+                            Console.WriteLine("PLEASE ENTER 'Y' OR 'N'");
+
+                            CollectInputs();
+
+                            Console.WriteLine("User input: " + userGuess);
+                        }
+                    }
+                    if (userGuess == 'Y')
+                    {
+                        InitializeGameState();
+                    }
+                    if (userGuess == 'N')
+                    {
+                        Console.Clear();
+
+                        Console.SetCursorPosition(0, 0);
+
+                        Console.WriteLine("Bye-Bye Now!");
+
+                        gameLoopShouldContinue = false;
+                    }
+                }
+            }
+
+            Console.Clear();
+
+            Console.SetCursorPosition(0, 0);
         }
 
         // Render the game state
         private static void Draw()
         {
+            Console.WriteLine(HangmanProgress(numberIncorrect));
 
+            for (int i = 0; i < wordToGuess.Length; i++)
+            {
+                Console.WriteLine(currentWordStatus[i]);
+
+                if (i != wordToGuess.Length - 1)
+                {
+                    Console.SetCursorPosition(i * 2 + 2, Console.CursorTop - 1);
+                }
+
+            }
+
+            Console.WriteLine("Letters Guessed: " + userGuessed);
+
+            Console.WriteLine(wordToGuess);
+
+            Console.WriteLine("Guess a letter or enter ~ to give up");
         }
 
         public static string ChooseWord() 
@@ -198,13 +265,13 @@ namespace Hangman
             return hProgress[num01];
         }
 
-        public static string[] UpdateWordStatus(string userGuesses, string hangmanWord)
+        public static string[] UpdateWordStatus()
         {
-            string[] newStatus = new string[hangmanWord.Length];
+            string[] newStatus = new string[wordToGuess.Length];
 
-            if (userGuesses == "")
+            if (userGuessed == "")
             {
-                for (int i = 0; i < (hangmanWord.Length); i++)
+                for (int i = 0; i < (wordToGuess.Length); i++)
                 {
                     newStatus[i] = "_ ";
                 }
@@ -212,11 +279,11 @@ namespace Hangman
 
             else
             {
-                for (int i = 0; i < (hangmanWord.Length); i++)
+                for (int i = 0; i < (wordToGuess.Length); i++)
                 {
-                    if (userGuesses.Contains(hangmanWord[i]))
+                    if (userGuessed.Contains(wordToGuess[i]))
                     {
-                        newStatus[i] = hangmanWord[i] + " ";
+                        newStatus[i] = wordToGuess[i] + " ";
                     }
 
                     else
@@ -249,6 +316,21 @@ namespace Hangman
             //}
         }
 
+        public static void CheckInputs()
+        {
+            if (userGuessed.Contains(userGuess))
+            {
+                Console.WriteLine("You have already guessed " + userGuess + "\r\nPlease enter another guess");
 
+                CollectInputs();
+            }
+
+            if (char.IsLetter(userGuess) == false && userGuess != '~')
+            {
+                Console.WriteLine("Please enter a letter.");
+
+                CollectInputs();
+            }
+        }
     }
 }

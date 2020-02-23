@@ -25,6 +25,8 @@ namespace Hangman
 
         static bool gameLoopShouldContinue = true;
 
+        static bool checkLoopShouldContinue = false;
+
 
         static void Main(string[] args)
         {
@@ -159,13 +161,9 @@ namespace Hangman
         // Read the next input from the user, store it in a global variable
         private static void CollectInputs()
         {
-            userGuessString = Console.ReadLine();
+            userGuess = Char.ToUpper(Console.ReadKey().KeyChar);
 
-            userGuessString = userGuessString.ToUpper();
-
-            userGuessed += userGuessString[0];
-
-            userGuess = userGuessString[0];
+            CheckInputs();
         }
 
         // Update the game state, determine victory and loss conditions
@@ -175,41 +173,44 @@ namespace Hangman
             if (wordToGuess.Contains(userGuess) == true)
             {
                 currentWordStatus = UpdateWordStatus();
-                numberCorrect++;
+                
+                numberCorrect = 0;
+                
+                for (int i = 0; i < wordToGuess.Length; i++)
+                {
+                    if (currentWordStatus[i] != "_ ")
+                    {
+                        numberCorrect++;
+                        Console.WriteLine(numberCorrect);
+                    }
+                }
+                if (numberCorrect == wordToGuess.Length)
+                {
+                    Console.Clear();
+
+                    Console.SetCursorPosition(0, 0);
+
+                    Draw();
+
+                    Console.WriteLine("CONGRADULATION, YOU WIN!!");
+
+                    PlayAgain();
+                }
             }
             else
             {
                 numberIncorrect++;
-                if (numberIncorrect == 6)
+                if (numberIncorrect == 5)
                 {
-                    Console.WriteLine("GAME OVER\r\nYOU ARE DEAD\r\nWOULD YOU LIKE TO PLAY AGAIN (Y/N)?");
-                    CollectInputs();
+                    Console.Clear();
 
-                    if (userGuess != 'Y' && userGuess != 'N')
-                    {
-                        while (userGuess != 'Y' || userGuess != 'N')
-                        {
-                            Console.WriteLine("PLEASE ENTER 'Y' OR 'N'");
+                    Console.SetCursorPosition(0, 0);
 
-                            CollectInputs();
+                    Draw();
 
-                            Console.WriteLine("User input: " + userGuess);
-                        }
-                    }
-                    if (userGuess == 'Y')
-                    {
-                        InitializeGameState();
-                    }
-                    if (userGuess == 'N')
-                    {
-                        Console.Clear();
+                    Console.WriteLine("GAME OVER\r\nYOU ARE DEAD");
 
-                        Console.SetCursorPosition(0, 0);
-
-                        Console.WriteLine("Bye-Bye Now!");
-
-                        gameLoopShouldContinue = false;
-                    }
+                    PlayAgain();
                 }
             }
 
@@ -294,42 +295,90 @@ namespace Hangman
             }
 
             return newStatus;
-
-            //for (int i = 0; i < hangmanWord.Length; i++)
-            //{
-            //    for (int j = 0; j < userGuesses.Length; j++)
-            //    {
-            //        if (hangmanWord.Contains(userGuesses[j]))
-            //        {
-            //            newStatus += userGuesses[j] + " ";
-
-            //            Console.WriteLine(newStatus);
-            //        }
-
-            //        else
-            //        {
-            //            newStatus += "_ ";
-
-            //            Console.WriteLine(newStatus);
-            //        }
-            //    }
-            //}
         }
 
         public static void CheckInputs()
         {
-            if (userGuessed.Contains(userGuess))
+            if (userGuess == '~')
             {
-                Console.WriteLine("You have already guessed " + userGuess + "\r\nPlease enter another guess");
+                gameLoopShouldContinue = false;
+            }
+
+            if (char.IsLetter(userGuess) == false )
+            {
+                Console.WriteLine("\r\nPlease Enter a Letter");
 
                 CollectInputs();
             }
 
-            if (char.IsLetter(userGuess) == false && userGuess != '~')
+            if (userGuessed.Contains(userGuess))
             {
-                Console.WriteLine("Please enter a letter.");
+                Console.WriteLine("\r\nYou have already guessed " + userGuess + "\r\nPlease enter another guess");
 
                 CollectInputs();
+            }
+            //while (checkLoopShouldContinue == true)
+            //{
+            //    if (true)
+            //    {
+
+            //    }
+            //}
+            //while (char.IsLetter(userGuess) == false || userGuessed.Contains(userGuess) == true)
+            //{
+            //    if (userGuess == '~')
+            //    {
+            //        gameLoopShouldContinue = false;
+            //    }
+
+            //    while (userGuessed.Contains(userGuess))
+            //    {
+            //        Console.WriteLine("\r\nYou have already guessed " + userGuess + "\r\nPlease enter another guess");
+            //        Console.WriteLine(userGuessed);
+            //        CollectInputs();
+            //    }
+
+
+            //    while (char.IsLetter(userGuess)) //&& userGuess != '~')
+            //    {
+            //        Console.WriteLine("\r\nPlease enter a letter.");
+
+            //        CollectInputs();
+            //    }
+            //}
+            userGuessed += $"{userGuess}";
+        }
+
+        public static void PlayAgain()
+        {
+            Console.WriteLine("WOULD YOU LIKE TO PLAY AGAIN (Y/N)?");
+
+            CollectInputs();
+
+            if (userGuess != 'Y' && userGuess != 'N')
+            {
+                while (userGuess != 'Y' && userGuess != 'N')
+                {
+                    Console.WriteLine("PLEASE ENTER 'Y' OR 'N'");
+
+                    CollectInputs();
+
+                    Console.WriteLine("User input: " + userGuess);
+                }
+            }
+            if (userGuess == 'Y')
+            {
+                InitializeGameState();
+            }
+            if (userGuess == 'N')
+            {
+                Console.Clear();
+
+                Console.SetCursorPosition(0, 0);
+
+                Console.WriteLine("Bye-Bye Now!");
+
+                gameLoopShouldContinue = false;
             }
         }
     }

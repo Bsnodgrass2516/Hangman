@@ -85,6 +85,10 @@ namespace Hangman
             currentWordStatus = UpdateWordStatus();
 
             gameLoopShouldContinue = true;
+
+            gameIsLost = false;
+
+            gameIsWon = false;
         }
 
         public static string ChooseWord()
@@ -107,6 +111,8 @@ namespace Hangman
         // Read the next input from the user, store it in a global variable
         private static void GetInput()
         {
+            checkLoopShouldContinue = true;
+
             while (checkLoopShouldContinue)
             {
                 // TODO: Prompt for inout
@@ -120,6 +126,8 @@ namespace Hangman
         private static void RetrieveCharacter()
         {
             userGuess = Char.ToUpper(Console.ReadKey().KeyChar);
+
+            Console.ReadKey().modifiers
         }
 
         /// <summary>
@@ -176,10 +184,7 @@ namespace Hangman
 
                 if (numberCorrect == wordToGuess.Length)
                 {
-                    Console.Clear();
-                    Console.SetCursorPosition(0, 0);
-                    Console.WriteLine("CONGRADULATION, YOU WIN!!");
-                    PlayAgain();
+                    gameIsWon = true;
                 }
             }
             else
@@ -188,10 +193,7 @@ namespace Hangman
 
                 if (numberIncorrect == 5)
                 {
-                    Console.Clear();
-                    Console.SetCursorPosition(0, 0);
-                    Console.WriteLine("GAME OVER\r\nYOU ARE DEAD");
-                    PlayAgain();
+                    gameIsLost = true;
                 }
             }
 
@@ -264,17 +266,18 @@ namespace Hangman
 
         private static void DrawLosingScreen()
         {
-            throw new NotImplementedException();
+            Console.Clear();
+            Console.SetCursorPosition(0, 0);
+            Console.WriteLine("GAME OVER\r\nYOU ARE DEAD");
+            PlayAgain();
         }
 
-        private static void RenderLossScreen()
+           private static void DrawVictoryScreen()
         {
-            throw new NotImplementedException();
-        }
-
-        private static void DrawVictoryScreen()
-        {
-            throw new NotImplementedException();
+            Console.Clear();
+            Console.SetCursorPosition(0, 0);
+            Console.WriteLine("CONGRADULATION, YOU WIN!!");
+            PlayAgain();
         }
 
         private static void DrawGame()
@@ -296,7 +299,7 @@ namespace Hangman
 
             Console.WriteLine(wordToGuess);
 
-            Console.WriteLine("Guess a letter or enter ~ to give up");
+            Console.WriteLine("Press any letter to guess, Shift+G to guess the word, and Shift+Q to quit the game.");
         }
 
         #endregion
@@ -305,6 +308,8 @@ namespace Hangman
 
         public static void PlayAgain()
         {
+            userGuessed = "";
+
             Console.WriteLine("WOULD YOU LIKE TO PLAY AGAIN (Y/N)?");
 
             GetInput();
@@ -326,6 +331,12 @@ namespace Hangman
             if (userGuess == 'Y')
             {
                 InitializeGameState();
+
+                Console.Clear();
+
+                Console.SetCursorPosition(0, 0);
+
+                Draw();
             }
 
             if (userGuess == 'N')

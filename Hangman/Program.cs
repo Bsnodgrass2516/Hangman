@@ -126,8 +126,6 @@ namespace Hangman
         private static void RetrieveCharacter()
         {
             userGuess = Char.ToUpper(Console.ReadKey().KeyChar);
-
-            Console.ReadKey().modifiers
         }
 
         /// <summary>
@@ -205,10 +203,14 @@ namespace Hangman
         public static string HangmanProgress(int num01)
         {
             string[] hProgress;
+            
+            hProgress = new string[6] {"", "\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n|______\r\n|      |","\r\n\r\n\r\n\r\n\r\n\r\n|\r\n|\r\n|______\r\n|      |",
+            "\r\n\r\n\r\n\r\n|\r\n|\r\n|\r\n|\r\n|______\r\n|      |","\r\n-----\r\n|   |\r\n|\r\n|\r\n|\r\n|\r\n|\r\n|______\r\n|      |",
+            "\r\n-----\r\n|   |\r\n|   O\r\n|  \\ /\r\n|   |\r\n|  / \\\r\n|\r\n|______\r\n|      |"};
 
-            hProgress = new string[6] {"", "-----\r\n|   \r\n|   \r\n|   \r\n|   \r\n|  \r\n|\r\n|\r\n------", "-----\r\n|   |\r\n|   O\r\n|  \r\n|   \r\n|  \r\n|\r\n|\r\n------",
-            "-----\r\n|   |\r\n|   O\r\n|  \\ /\r\n|   \r\n|  \r\n|\r\n|\r\n------","-----\r\n|   |\r\n|   O\r\n|  \\ /\r\n|   |\r\n|  \r\n|\r\n|\r\n------",
-            "-----\r\n|   |\r\n|   O\r\n|  \\ /\r\n|   |\r\n|  / \\\r\n|\r\n|\r\n------"};
+            //hProgress = new string[6] {"", "-----\r\n|   \r\n|   \r\n|   \r\n|   \r\n|  \r\n|\r\n|\r\n------", "-----\r\n|   |\r\n|   O\r\n|  \r\n|   \r\n|  \r\n|\r\n|\r\n------",
+            //"-----\r\n|   |\r\n|   O\r\n|  \\ /\r\n|   \r\n|  \r\n|\r\n|\r\n------","-----\r\n|   |\r\n|   O\r\n|  \\ /\r\n|   |\r\n|  \r\n|\r\n|\r\n------",
+            //"-----\r\n|   |\r\n|   O\r\n|  \\ /\r\n|   |\r\n|  / \\\r\n|\r\n|\r\n------"};
 
             return hProgress[num01];
         }
@@ -252,10 +254,12 @@ namespace Hangman
         {
             if (gameIsWon)
             {
+                DrawGame();
                 DrawVictoryScreen();
             }
             else if (gameIsLost)
             {
+                DrawGame();
                 DrawLosingScreen();
             }
             else
@@ -266,17 +270,17 @@ namespace Hangman
 
         private static void DrawLosingScreen()
         {
-            Console.Clear();
-            Console.SetCursorPosition(0, 0);
-            Console.WriteLine("GAME OVER\r\nYOU ARE DEAD");
+            //Console.Clear();
+            //Console.SetCursorPosition(0, 0);
+            Console.WriteLine("\r\nGAME OVER\r\nYOU ARE DEAD");
             PlayAgain();
         }
 
            private static void DrawVictoryScreen()
         {
-            Console.Clear();
-            Console.SetCursorPosition(0, 0);
-            Console.WriteLine("CONGRADULATION, YOU WIN!!");
+            //Console.Clear();
+            //Console.SetCursorPosition(0, 0);
+            Console.WriteLine("\r\nCONGRADULATION, YOU WIN!!");
             PlayAgain();
         }
 

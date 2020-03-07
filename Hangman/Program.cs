@@ -18,7 +18,7 @@ namespace Hangman
 
         static string wordToGuess;
 
-        static char userGuess;
+        static ConsoleKeyInfo userGuess;
 
         static string userGuessed;
 
@@ -74,7 +74,7 @@ namespace Hangman
 
             wordToGuess = ChooseWord();
 
-            userGuess = '\0';
+            /*userGuess.Key = '\0'*/;
 
             userGuessed = "";
 
@@ -125,7 +125,8 @@ namespace Hangman
 
         private static void RetrieveCharacter()
         {
-            userGuess = Char.ToUpper(Console.ReadKey().KeyChar);
+            userGuess = Console.ReadKey();
+            //userGuess = Char.ToUpper(Console.ReadKey().KeyChar);
         }
 
         /// <summary>
@@ -133,26 +134,49 @@ namespace Hangman
         /// </summary>
         public static void CheckInputs()
         {
-            if (userGuess == '~')
+            if (userGuess.KeyChar == 'Q'/* && ConsoleModifiers.Alt != 0 */)
             {
                 checkLoopShouldContinue = false;
                 gameLoopShouldContinue = false;
             }
-            else if (char.IsLetter(userGuess))
+            else if (userGuess.KeyChar == 'G')
             {
-                if (userGuessed.Contains(userGuess))
+                userGuessed = "";
+                checkLoopShouldContinue = false;
+                gameLoopShouldContinue = false;
+                guessWord();
+            }
+            else if (char.IsLetter(userGuess.KeyChar))
+            {
+                if (userGuessed.Contains(char.ToUpper(userGuess.KeyChar)))
                 {
-                    Console.WriteLine("\r\nYou have already guessed " + userGuess + "\r\nPlease enter another guess");
+                    Console.WriteLine("\r\nYou have already guessed " + char.ToUpper(userGuess.KeyChar) + "\r\nPlease enter another guess");
                 }
                 else
                 {
                     checkLoopShouldContinue = false;
-                    userGuessed += $"{userGuess}";
+                    userGuessed += $"{char.ToUpper(userGuess.KeyChar)}";
                 }
             }
             else
             {
                 Console.WriteLine("\r\nPlease Enter a Letter");
+            }
+        }
+
+        private static void guessWord()
+        {
+            string playerGuess;
+
+            Console.WriteLine("Make your guess, if you are wrong you will lose.");
+            playerGuess = Console.ReadLine().ToUpper();
+            if (playerGuess == wordToGuess)
+            {
+                gameIsWon = true;
+            }
+            else
+            {
+                gameIsLost = true;
             }
         }
 
@@ -165,7 +189,7 @@ namespace Hangman
         /// </summary>
         private static void Update()
         {
-            if (wordToGuess.Contains(userGuess) == true)
+            if (wordToGuess.Contains(char.ToUpper(userGuess.KeyChar)) == true)
             {
                 currentWordStatus = UpdateWordStatus();
 
@@ -320,9 +344,9 @@ namespace Hangman
 
             // TODO: Convert to if else chain?
 
-            if (userGuess != 'Y' && userGuess != 'N')
+            if (userGuess.KeyChar != 'y' && userGuess.KeyChar != 'n')
             {
-                while (userGuess != 'Y' && userGuess != 'N')
+                while (userGuess.KeyChar != 'y' && userGuess.KeyChar != 'n')
                 {
                     Console.WriteLine("PLEASE ENTER 'Y' OR 'N'");
 
@@ -332,7 +356,7 @@ namespace Hangman
                 }
             }
 
-            if (userGuess == 'Y')
+            if (userGuess.KeyChar == 'y')
             {
                 InitializeGameState();
 
@@ -343,7 +367,7 @@ namespace Hangman
                 Draw();
             }
 
-            if (userGuess == 'N')
+            if (userGuess.KeyChar == 'n')
             {
                 Console.Clear();
 

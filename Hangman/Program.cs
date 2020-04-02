@@ -132,14 +132,17 @@ namespace Hangman
         /// <summary>
         /// Verify if input is valid and set flag to end input if so
         /// </summary>
+        /// 
+
+        // THE BOOLEAN HERE IS WHERE I AM HAVING TROUBLE with:  && (userGuess.Modifiers & ConsoleModifiers.Alt) != 0
         public static void CheckInputs()
         {
-            if (userGuess.KeyChar == 'Q'/* && ConsoleModifiers.Alt != 0 */)
+            if (userGuess.KeyChar == 'Q' && (userGuess.Modifiers & ConsoleModifiers.Alt) != 0)
             {
                 checkLoopShouldContinue = false;
                 gameLoopShouldContinue = false;
             }
-            else if (userGuess.KeyChar == 'G')
+            else if (userGuess.KeyChar == 'G' && (userGuess.Modifiers & ConsoleModifiers.Alt) != 0)
             {
                 userGuessed = "";
                 checkLoopShouldContinue = false;
@@ -168,7 +171,7 @@ namespace Hangman
         {
             string playerGuess;
 
-            Console.WriteLine("Make your guess, if you are wrong you will lose.");
+            Console.WriteLine("\r\nMake your guess, if you are wrong you will lose.");
             playerGuess = Console.ReadLine().ToUpper();
             if (playerGuess == wordToGuess)
             {
@@ -176,7 +179,8 @@ namespace Hangman
             }
             else
             {
-                gameIsLost = true;
+                //gameIsLost = true;
+                numberIncorrect = 4;
             }
         }
 
@@ -344,19 +348,19 @@ namespace Hangman
 
             // TODO: Convert to if else chain?
 
-            if (userGuess.KeyChar != 'y' && userGuess.KeyChar != 'n')
+            if (char.ToLower(userGuess.KeyChar) != 'y' && char.ToLower(userGuess.KeyChar) != 'n')
             {
-                while (userGuess.KeyChar != 'y' && userGuess.KeyChar != 'n')
+                while (char.ToLower(userGuess.KeyChar) != 'y' && char.ToLower(userGuess.KeyChar) != 'n')
                 {
-                    Console.WriteLine("PLEASE ENTER 'Y' OR 'N'");
+                    Console.WriteLine("\r\nPLEASE ENTER 'Y' OR 'N'");
 
                     GetInput();
 
-                    Console.WriteLine("User input: " + userGuess);
+                    Console.WriteLine("\r\nUser input: " + userGuess);
                 }
             }
 
-            if (userGuess.KeyChar == 'y')
+            if (char.ToLower(userGuess.KeyChar) == 'y')
             {
                 InitializeGameState();
 
@@ -367,7 +371,7 @@ namespace Hangman
                 Draw();
             }
 
-            if (userGuess.KeyChar == 'n')
+            if (char.ToLower(userGuess.KeyChar) == 'n')
             {
                 Console.Clear();
 

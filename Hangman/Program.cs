@@ -143,6 +143,7 @@ namespace Hangman
             {
                 checkLoopShouldContinue = false;
                 gameLoopShouldContinue = false;
+                numberIncorrect = -1;
             }
             else if (char.ToLower(userGuess.KeyChar) == 'g' && (userGuess.Modifiers & ConsoleModifiers.Alt) != 0)
             {
@@ -179,7 +180,7 @@ namespace Hangman
             {
                 gameIsWon = true;
                 userGuessed = playerGuess;
-                //userGuess = playerGuess;
+                numberIncorrect = -1;
             }
             else
             {
@@ -304,7 +305,7 @@ namespace Hangman
         {
             //Console.Clear();
             //Console.SetCursorPosition(0, 0);
-            Console.WriteLine("\r\nGAME OVER\r\nYOU ARE DEAD");
+            Console.WriteLine("\r\nTHE WORD WAS: " + wordToGuess + "\r\nGAME OVER\r\nYOU ARE DEAD");
             PlayAgain();
         }
 
@@ -334,6 +335,8 @@ namespace Hangman
             Console.WriteLine("Letters Guessed: " + userGuessed);
 
             Console.WriteLine(wordToGuess);
+
+            Console.WriteLine(gameLoopShouldContinue);
 
             Console.WriteLine("Press any letter to guess, Alt+G to guess the word, and Alt+Q to quit the game.");
         }

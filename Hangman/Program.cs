@@ -137,12 +137,15 @@ namespace Hangman
         // THE BOOLEAN HERE IS WHERE I AM HAVING TROUBLE with:  && (userGuess.Modifiers & ConsoleModifiers.Alt) != 0
         public static void CheckInputs()
         {
-            if (userGuess.KeyChar == 'Q' && (userGuess.Modifiers & ConsoleModifiers.Alt) != 0)
+            //Console.WriteLine(userGuess.Modifiers & ConsoleModifiers.Alt);
+
+            if (char.ToLower(userGuess.KeyChar) == 'q' && (userGuess.Modifiers & ConsoleModifiers.Alt) != 0)
             {
                 checkLoopShouldContinue = false;
                 gameLoopShouldContinue = false;
+                numberIncorrect = -1;
             }
-            else if (userGuess.KeyChar == 'G' && (userGuess.Modifiers & ConsoleModifiers.Alt) != 0)
+            else if (char.ToLower(userGuess.KeyChar) == 'g' && (userGuess.Modifiers & ConsoleModifiers.Alt) != 0)
             {
                 userGuessed = "";
                 checkLoopShouldContinue = false;
@@ -176,6 +179,8 @@ namespace Hangman
             if (playerGuess == wordToGuess)
             {
                 gameIsWon = true;
+                userGuessed = playerGuess;
+                numberIncorrect = -1;
             }
             else
             {
@@ -300,7 +305,7 @@ namespace Hangman
         {
             //Console.Clear();
             //Console.SetCursorPosition(0, 0);
-            Console.WriteLine("\r\nGAME OVER\r\nYOU ARE DEAD");
+            Console.WriteLine("\r\nTHE WORD WAS: " + wordToGuess + "\r\nGAME OVER\r\nYOU ARE DEAD");
             PlayAgain();
         }
 
@@ -329,9 +334,13 @@ namespace Hangman
 
             Console.WriteLine("Letters Guessed: " + userGuessed);
 
-            Console.WriteLine(wordToGuess);
+            //Console.WriteLine(wordToGuess);
 
-            Console.WriteLine("Press any letter to guess, Shift+G to guess the word, and Shift+Q to quit the game.");
+            //Console.WriteLine("GAME LOOP SHOULD CONTINUE: " + gameLoopShouldContinue);
+
+            //Console.WriteLine(userGuess.Modifiers + userGuess.KeyChar);
+
+            Console.WriteLine("Press any letter to guess, Alt+G to guess the word, and Alt+Q to quit the game.");
         }
 
         #endregion

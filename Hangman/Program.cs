@@ -334,9 +334,11 @@ namespace Hangman
 
             Console.WriteLine("Letters Guessed: " + userGuessed);
 
-            Console.WriteLine(wordToGuess);
+            //Console.WriteLine(wordToGuess);
 
-            Console.WriteLine(gameLoopShouldContinue);
+            //Console.WriteLine("GAME LOOP SHOULD CONTINUE: " + gameLoopShouldContinue);
+
+            //Console.WriteLine(userGuess.Modifiers + userGuess.KeyChar);
 
             Console.WriteLine("Press any letter to guess, Alt+G to guess the word, and Alt+Q to quit the game.");
         }
